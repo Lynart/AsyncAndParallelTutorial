@@ -105,8 +105,6 @@ namespace StockHistory
                     return stderr;
                 });
 
-
-
                 //
                 // Output:
                 //
