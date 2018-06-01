@@ -97,10 +97,10 @@ namespace StockHistory
                     return stddev;
                 });
 
-                Task<double> t_stderr = Task.Factory.StartNew(() =>
+                Task<double> t_stderr = t_stddev.ContinueWith((a) =>
                 {
                     // Standard error:
-                    double stderr = t_stddev.Result / Math.Sqrt(N);
+                    double stderr = a.Result / Math.Sqrt(N);
 
                     return stderr;
                 });
@@ -120,8 +120,6 @@ namespace StockHistory
                 Console.WriteLine("   Min price:    {0:C}", t_min.Result);
                 Console.WriteLine("   Max price:    {0:C}", t_max.Result);
                 Console.WriteLine("   Avg price:    {0:C}", t_avg.Result);
-                t_stddev.Wait();
-                t_stderr.Wait();
                 Console.WriteLine("   Std dev/err:   {0:0.000} / {1:0.000}", t_stddev.Result, t_stderr.Result);
             }
             catch (Exception ex)
