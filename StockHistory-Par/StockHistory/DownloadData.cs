@@ -28,7 +28,7 @@ namespace StockHistory
 	class DownloadData
 	{
 		/// <summary>
-		/// Static constructor:
+		/// Static constructor: event handler for scheduling exceptions
 		/// </summary>
 		static DownloadData()
 		{
@@ -41,11 +41,16 @@ namespace StockHistory
 				TaskUnobservedException_Handler);
 		}
 
+        static void TaskScheduler_TaskUnobservedException_Handler(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            e.SetObserved(); //observe/ignore this exception
+        }
 
-		/// <summary>
-		/// External method for checking internet access:
-		/// </summary>
-		[DllImport("wininet.dll")]
+
+        /// <summary>
+        /// External method for checking internet access:
+        /// </summary>
+        [DllImport("wininet.dll")]
 		private extern static bool InternetGetConnectedState(out int Description, int ReservedValue);
 
 
