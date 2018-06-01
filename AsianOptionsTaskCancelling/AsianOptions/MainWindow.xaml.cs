@@ -72,7 +72,9 @@ namespace AsianOptions
 			int count = System.Convert.ToInt32(this.lblCount.Content);
 			count++;
 			this.lblCount.Content = count.ToString();
-			
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+            CancellationToken token = cts.Token;
 			//
 			// Run simulation on a separate task to price option:
 			//
@@ -81,7 +83,7 @@ namespace AsianOptions
 					Random rand = new Random();
 					int start = System.Environment.TickCount;
 
-					double price = AsianOptionsPricing.Simulation(rand, initial, exercise, up, down, interest, periods, sims);
+					double price = AsianOptionsPricing.Simulation(token, rand, initial, exercise, up, down, interest, periods, sims);
 
 					int stop = System.Environment.TickCount;
 
@@ -91,8 +93,8 @@ namespace AsianOptions
 						price, elapsedTimeInSecs);
 						
 					return result;
-				}
-			);
+				},
+                token);
 
 			//
 			// Display the results once computation task is done, but ensure
