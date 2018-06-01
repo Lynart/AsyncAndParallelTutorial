@@ -25,7 +25,7 @@ namespace AsianOptions
     /// </summary>
     public partial class MainWindow : Window
     {
-        CancellationTokenSource cts;
+        CancellationTokenSource cts = new CancellationTokenSource();
         //
         // Methods:
         //
@@ -74,7 +74,9 @@ namespace AsianOptions
             count++;
             this.lblCount.Content = count.ToString();
 
-            cts = new CancellationTokenSource();
+            //By default it is false
+            this.mnuFileCancel.IsEnabled = true;
+
             CancellationToken token = cts.Token;
             //
             // Run simulation on a separate task to price option:
@@ -125,6 +127,7 @@ namespace AsianOptions
 
                     if (count == 0)
                     {
+                        this.mnuFileCancel.IsEnabled = false;
                         this.spinnerWait.Spin = false;
                         this.spinnerWait.Visibility = System.Windows.Visibility.Collapsed;
                     }
@@ -136,6 +139,7 @@ namespace AsianOptions
         private void mnuFileCancel_Click(object sender, RoutedEventArgs e)
         {
             cts.Cancel();
+            cts = new CancellationTokenSource();
         }
     }//class
 }//namespace
