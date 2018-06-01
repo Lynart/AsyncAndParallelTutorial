@@ -144,7 +144,9 @@ namespace StockHistory
             catch (AggregateException ae)
             {
                 Console.WriteLine();
-                Console.WriteLine("Tasking Error: {0}", ae.InnerException.Message);
+                ae = ae.Flatten();
+                foreach(Exception ex in ae.InnerExceptions)
+                    Console.WriteLine("Tasking Error: {0}", ex.Message);
             }
 			catch (Exception ex)
 			{
