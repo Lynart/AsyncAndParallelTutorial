@@ -60,11 +60,6 @@ namespace StockHistory
 		{
 			try
 			{
-                Task t_error = Task.Factory.StartNew(() => {
-                    int i = 0;
-                    int j = 1000 / i;
-                });
-
 				StockData data = DownloadData.GetHistoricalData(symbol, numYearsOfHistory);
 
 				int N = data.Prices.Count;
@@ -121,7 +116,7 @@ namespace StockHistory
 				// an implicit .Wait), we use WaitAll for efficiency so that we process tasks in
 				// order as they finish (versus an arbitrary order implied by calls to .Result).
 				//
-				Task.WaitAll(new Task[] { T_min, T_max, T_avg, T_stddev, T_stderr, t_error });
+				Task.WaitAll(new Task[] { T_min, T_max, T_avg, T_stddev, T_stderr});
 
 				decimal min = T_min.Result;
 				decimal max = T_max.Result;

@@ -168,12 +168,22 @@ namespace StockHistory
 			// Now wait for the first one to return data:
 			//
 			Task<StockData>[] tasks = { t_yahoo, t_nasdaq, t_msn };
-			int index = Task.WaitAny(tasks);
 
-			return tasks[index].Result;
+            //Wait for any task to finish and return the first successful result
+            while(tasks.Length > 0)
+            {
+                int index = Task.WaitAny(tasks);
+                Task<StockData> finished = tasks[index];
 
-			// all failed:
-			//throw new ApplicationException("all web sites failed");
+                if (finished.Exception == null)
+                    return finished.Result;
+
+                //Replace tasks with everything except finished ones
+                //This is only hit if there is an exception (the early return won't be called)
+                tasks = tasks.Where(t => t != finished).ToArray();
+            }
+			// if we get here, all tasks failed:
+			throw new ApplicationException("all web sites failed");
 		}
 
 
