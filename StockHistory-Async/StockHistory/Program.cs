@@ -112,6 +112,7 @@ namespace StockHistory
                 //
                 Task[] tasks = { t_min, t_max, t_avg, t_stddev, t_stderr };
                 Task.WaitAll(tasks);
+
                 Console.WriteLine();
                 Console.WriteLine("** {0} **", symbol);
                 Console.WriteLine("   Data source:  '{0}'", data.DataSource);
